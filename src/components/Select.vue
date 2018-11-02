@@ -369,7 +369,7 @@
     </div>
 
     <transition :name="transition">
-      <ul ref="dropdownMenu" v-if="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }" role="listbox" @mousedown="onMousedown">
+      <virtual-list :size="30" :remain="10"  ref="dropdownMenu" v-if="dropdownOpen" class="dropdown-menu" :style="{ 'max-height': maxHeight }" role="listbox" @mousedown="onMousedown">
         <li role="option" v-for="(option, index) in filteredOptions" v-bind:key="index" :class="{ active: isOptionSelected(option), highlight: index === typeAheadPointer }" @mouseover="typeAheadPointer = index">
           <a @mousedown.prevent.stop="select(option)">
           <slot name="option" v-bind="(typeof option === 'object')?option:{[label]: option}">
@@ -380,7 +380,7 @@
         <li v-if="!filteredOptions.length" class="no-options">
           <slot name="no-options">Sorry, no matching options.</slot>
         </li>
-      </ul>
+      </virtual-list>
     </transition>
   </div>
 </template>
@@ -389,6 +389,11 @@
   import pointerScroll from '../mixins/pointerScroll'
   import typeAheadPointer from '../mixins/typeAheadPointer'
   import ajax from '../mixins/ajax'
+
+  import VirtualScrollList from 'vue-virtual-scroll-list';
+
+  // how to pass through options to virtual scroll list component?
+  Vue.component('virtual-list', VirtualScrollList);
 
   export default {
     mixins: [pointerScroll, typeAheadPointer, ajax],
